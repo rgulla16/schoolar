@@ -1,0 +1,140 @@
+CREATE SCHEMA schoolar;
+
+CREATE TABLE Schoolar.Addresses (
+    address_id INT PRIMARY KEY,
+    street VARCHAR(255),
+    city VARCHAR(50),
+    state VARCHAR(50),
+    zipcode VARCHAR(10),
+    country VARCHAR(50)
+);
+CREATE TABLE Schoolar.Students (
+    student_id INT PRIMARY KEY,
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    date_of_birth DATE,
+    gender VARCHAR(10),
+    address_id INT,
+    contact_id INT,
+    email VARCHAR(255),
+    mobile_number VARCHAR(15),
+    enrollment_date DATE,
+    profile_picture VARCHAR(255),
+    FOREIGN KEY (address_id) REFERENCES Schoolar.Addresses(address_id)
+);
+
+CREATE TABLE Schoolar.Interests (
+    interest_id INT PRIMARY KEY,
+    student_id INT,
+    interest VARCHAR(255),
+    description VARCHAR(15),
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id)
+);
+# school data 
+CREATE TABLE Schoolar.Schools (
+    school_id INT PRIMARY KEY,
+    school_name VARCHAR(100),
+    address_id INT,
+    contact_id INT,
+    mobile_number VARCHAR(15),
+    email VARCHAR(255),
+    type VARCHAR(255),
+    FOREIGN KEY (address_id) REFERENCES Schoolar.Addresses(address_id)
+);
+# school data 
+CREATE TABLE Schoolar.School_Rank (
+    school_id INT PRIMARY KEY,
+    ranking_name VARCHAR(100),
+    world_rank INT,
+    national_rank INT,
+    score float,
+    description VARCHAR(255),
+    type VARCHAR(255),
+    FOREIGN KEY (school_id) REFERENCES Schoolar.Schools(school_id)
+);
+
+
+# school and student relation
+CREATE TABLE Schoolar.Student_School (
+    school_id INT PRIMARY KEY,
+    student_id INT,
+    school_name VARCHAR(100),
+    address_id INT,
+    contact_id INT,
+    enrollment_start_date DATE,
+    enrollment_end_date DATE,
+    FOREIGN KEY (address_id) REFERENCES Schoolar.Addresses(address_id),
+    FOREIGN KEY (address_id) REFERENCES Schoolar.Schools(school_id),
+    FOREIGN KEY (address_id) REFERENCES Schoolar.Students(student_id)
+);
+
+CREATE TABLE Schoolar.Courses (
+    course_id INT PRIMARY KEY,
+    course_name VARCHAR(100),
+    school_id INT,
+    level INT, 
+    description VARCHAR(15),
+    FOREIGN KEY (school_id) REFERENCES Schoolar.Schools(school_id)
+);
+CREATE TABLE Schoolar.Grades (
+    grade_id INT PRIMARY KEY,
+    course_id INT,
+    student_id INT,
+    grade VARCHAR(255),
+    points float,
+    description VARCHAR(15),
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id),
+    FOREIGN KEY (course_id) REFERENCES Schoolar.Courses(course_id)
+);
+
+
+CREATE TABLE Schoolar.Parents (
+    parent_id INT PRIMARY KEY,
+    student_id INT,
+    relationship VARCHAR(20),
+    first_name VARCHAR(50),
+    last_name VARCHAR(50),
+    mobile_number VARCHAR(15),
+    email VARCHAR(255),
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id)
+);
+
+CREATE TABLE Schoolar.Certificates (
+    certificate_id INT PRIMARY KEY,
+    student_id INT,
+    course_id INT,
+    issue_date DATE,
+    certificate VARCHAR(255),
+    uploaded_by VARCHAR(255),
+    validated BOOLEAN,
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id),
+    FOREIGN KEY (course_id) REFERENCES Schoolar.Courses(course_id)
+);
+CREATE TABLE Schoolar.Calendar (
+    calendar_id INT PRIMARY KEY,
+    student_id INT,
+    month VARCHAR(100),
+    year VARCHAR(100),
+    day VARCHAR(100),
+    start_time DATE,
+    end_time DATE,
+    recurring BOOLEAN,
+    frequency VARCHAR(100),
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id)
+);
+CREATE TABLE Schoolar.Notifications (
+    notification_id INT PRIMARY KEY,
+    student_id INT,
+    month VARCHAR(100),
+    year VARCHAR(100),
+    day VARCHAR(100),
+    start_time DATE,
+    end_time DATE,
+    recurring BOOLEAN,
+    reminder_time DATE,
+    frequency VARCHAR(100),
+    FOREIGN KEY (student_id) REFERENCES Schoolar.Students(student_id)
+);
+
+
+SELECT table_name FROM all_tables WHERE owner = 'Schoolar';
